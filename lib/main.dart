@@ -14,7 +14,30 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Personal Expense',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.teal,
+          accentColor: Colors.deepOrangeAccent,
+        ),
+        fontFamily: 'Quicksand',
+        appBarTheme: const AppBarTheme(
+          titleTextStyle: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          )
+        ),
+        textTheme: const TextTheme(
+          titleSmall: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
+          titleLarge: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+          ),
+        )
       ),
       onGenerateRoute: route.controller,
       initialRoute: route.homePage,

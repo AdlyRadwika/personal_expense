@@ -7,7 +7,7 @@ const homePage = 'home_page';
 Route<dynamic> controller(RouteSettings settings) {
   switch (settings.name) {
     case homePage:
-      return MaterialPageRoute(builder: (context) => const HomePage(),);
+      return MaterialPageRoute(builder: (context) => HomePage(),);
     default:
       throw("Page is not found");
   }
