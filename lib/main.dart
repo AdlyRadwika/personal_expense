@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSwatch(
           primarySwatch: Colors.teal,
           accentColor: Colors.deepOrangeAccent,
+          errorColor: Colors.redAccent,
         ),
         fontFamily: 'Quicksand',
         appBarTheme: const AppBarTheme(
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
           ),
           titleLarge: TextStyle(
             fontFamily: 'OpenSans',
-            fontSize: 28,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
           ),
         )

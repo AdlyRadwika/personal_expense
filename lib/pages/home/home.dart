@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/model/transaction.dart';
 
+import 'package:personal_expense/pages/home/widgets/chart_widget.dart';
 import 'package:personal_expense/pages/home/widgets/transaction_list_widget.dart';
 import 'package:personal_expense/pages/home/widgets/new_transaction_widget.dart';
 
@@ -30,15 +31,22 @@ class _HomePageState extends State<HomePage> {
     //   date: DateTime.now(),
     // ),
   ];
+  
+  List<Transaction> get _recentTransactions {
+    return _userTransaction.where((tx) {
+      return tx.date.isAfter(
+        DateTime.now().subtract(const Duration(days: 7))
+      );
+    }).toList();
+  }
 
-  void _addNewTransaction(String title, double amount){
+  void _addNewTransaction(String title, double amount, DateTime chosenDate){
     final newTransaction = Transaction(
         id: DateTime.now().hashCode.toString(),
         title: title,
         amount: amount,
-        date: DateTime.now()
+        date: chosenDate,
     );
-
     setState(() {
       _userTransaction.add(newTransaction);
     });
@@ -55,6 +63,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _deleteTransaction(String id) {
+    setState(() {
+      _userTransaction.removeWhere((element) => element.id == id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,36 +81,20 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            children: <Widget> [
-              SizedBox(
-                height: 50,
-                width: double.infinity,
-                child: Card(
-                  color: Theme.of(context).colorScheme.secondary,
-                  elevation: 5,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: const [
-                        Text(
-                          "Chart",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              color: Colors.white
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+      body: Container(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: <Widget> [
+            Chart(
+              recentTransactions: _recentTransactions,
+            ),
+            Expanded(
+              child: TransactionList(
+                transactions: _userTransaction,
+                deleteTx: _deleteTransaction,
               ),
-              TransactionList(transactions: _userTransaction),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(

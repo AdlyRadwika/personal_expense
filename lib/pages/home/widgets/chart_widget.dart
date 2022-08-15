@@ -2,51 +2,65 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:personal_expense/data/model/transaction.dart';
+import 'package:personal_expense/pages/home/widgets/chart_bar_widget.dart';
 
 class Chart extends StatelessWidget {
   final List<Transaction> recentTransactions;
 
   const Chart({Key? key, required this.recentTransactions}) : super(key: key);
 
-  List<Map> groupedAmountLastWeek() {
-    List<double> lastWeekAmounts = this.lastWeekAmounts();
-
+  List<Map<String, Object>> get groupedTransactionValues {
     return List.generate(7, (index) {
+      final weekDay = DateTime.now().subtract(
+        Duration(days: 6 - index),
+      );
+      var totalSum = 0.0;
+
+      for (var i = 0; i < recentTransactions.length; i++) {
+        if (recentTransactions[i].date.day == weekDay.day
+        && recentTransactions[i].date.month == weekDay.month
+        && recentTransactions[i].date.year == weekDay.year) {
+          totalSum += recentTransactions[i].amount;
+        }
+      }
+
       return {
-        'day': DateHelper.weekDayTimeAgo(days: index),
-        'amount': lastWeekAmounts[index],
+        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'amount': totalSum,
       };
     });
   }
 
-
-  List<double> lastWeekAmounts() {
-    final DateTime now = DateTime.now();
-    List<double> result = [0, 0, 0, 0, 0, 0, 0];
-
-    for (int i = 0; i < recentTransactions.length; i++) {
-      int daysAgo = now.difference(recentTransactions[i].executionDate).inDays;
-      if (daysAgo <= 6) {
-        result[daysAgo] += recentTransactions[i].amount;
-      }
-    }
-
-    for (int j = 0; j < result.length; j++) {
-      result[j] = NumericHelper.roundDouble(result[j], 2);
-    }
-
-    return result;
+  double get totalSpending {
+    return groupedTransactionValues.fold(0.0, (sum, item) {
+      return sum + (item['amount'] as double);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint(groupedTransactionValues.toString());
     return Card(
       elevation: 6,
-      margin: EdgeInsets.all(20),
-      child: Row(
-        children: [
-
-        ],
+      margin: const EdgeInsets.all(20),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransactionValues.map((logs) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                label: logs['day'] as String,
+                spendingAmount: logs['amount'] as double,
+                spendingPercentage:
+                totalSpending == 0.0
+                  ? 0.0
+                  : (logs['amount'] as double) / totalSpending,
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
