@@ -25,7 +25,7 @@ class Chart extends StatelessWidget {
       }
 
       return {
-        'day': DateFormat.E().format(weekDay).substring(0, 1),
+        'day': DateFormat.E().format(weekDay),
         'amount': totalSum,
       };
     });
@@ -39,7 +39,10 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    //temporary
     debugPrint(groupedTransactionValues.toString());
+
     return Card(
       elevation: 6,
       margin: const EdgeInsets.all(20),
@@ -49,7 +52,6 @@ class Chart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: groupedTransactionValues.map((logs) {
             return Flexible(
-              fit: FlexFit.tight,
               child: ChartBar(
                 label: logs['day'] as String,
                 spendingAmount: logs['amount'] as double,
