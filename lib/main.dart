@@ -33,10 +33,21 @@ class MyApp extends StatelessWidget {
             fontSize: 16,
             fontWeight: FontWeight.w500,
           ),
+          titleMedium: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
           titleLarge: TextStyle(
             fontFamily: 'OpenSans',
             fontSize: 26,
             fontWeight: FontWeight.bold,
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: 'OpenSans',
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         )
       ),

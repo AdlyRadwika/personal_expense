@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../data/model/transaction.dart';
 
+import 'package:personal_expense/pages/home/widgets/add_button_widget.dart';
 import 'package:personal_expense/pages/home/widgets/chart_widget.dart';
 import 'package:personal_expense/pages/home/widgets/transaction_list_widget.dart';
 import 'package:personal_expense/pages/home/widgets/new_transaction_widget.dart';
@@ -17,20 +18,7 @@ class _HomePageState extends State<HomePage> {
   final titleController = TextEditingController();
   final amountController = TextEditingController();
 
-  final List<Transaction> _userTransaction = [
-    // Transaction(
-    //   id: 't1',
-    //   title: 'New Clothes',
-    //   amount: 43.12,
-    //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'New Toys',
-    //   amount: 59.34,
-    //   date: DateTime.now(),
-    // ),
-  ];
+  final List<Transaction> _userTransaction = [];
   
   List<Transaction> get _recentTransactions {
     return _userTransaction.where((tx) {
@@ -63,12 +51,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _deleteTransaction(String id) {
-    setState(() {
-      _userTransaction.removeWhere((element) => element.id == id);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,24 +64,27 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       body: Container(
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: <Widget> [
-            Chart(
-              recentTransactions: _recentTransactions,
-            ),
-            Expanded(
-              child: TransactionList(
-                transactions: _userTransaction,
-                deleteTx: _deleteTransaction,
+        padding: const EdgeInsets.all(15),
+        child: SingleChildScrollView(
+          primary: true,
+          child: Column(
+            children: <Widget> [
+              Chart(
+                recentTransactions: _recentTransactions,
               ),
-            ),
-          ],
+              SingleChildScrollView(
+                child: TransactionList(
+                  transactions: _userTransaction,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _startAddNewTransaction(context),
-        child: const Icon(Icons.add),
+      floatingActionButton: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+        width: MediaQuery.of(context).size.width,
+        child: AddButton(addNewTransaction: _startAddNewTransaction),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
