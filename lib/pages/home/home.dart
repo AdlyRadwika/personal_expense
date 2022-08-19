@@ -42,10 +42,23 @@ class _HomePageState extends State<HomePage> {
 
   void _startAddNewTransaction(BuildContext context) {
     showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15)
+        )
+      ),
+      backgroundColor: Colors.white,
       context: context,
+      isScrollControlled: true,
       builder: (builderContext) {
-        return NewTransaction(
-          addTransaction: _addNewTransaction,
+        return Wrap(
+          children: [
+            NewTransaction(
+              addTransaction: _addNewTransaction,
+              bottomSheetContext: context,
+            ),
+          ]
         );
       },
     );
@@ -72,21 +85,19 @@ class _HomePageState extends State<HomePage> {
               Chart(
                 recentTransactions: _recentTransactions,
               ),
-              SingleChildScrollView(
-                child: TransactionList(
-                  transactions: _userTransaction,
-                ),
+              const SizedBox(height: 12,),
+              TransactionList(
+                transactions: _userTransaction,
               ),
             ],
           ),
         ),
       ),
-      floatingActionButton: Container(
+      bottomNavigationBar:Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         width: MediaQuery.of(context).size.width,
         child: AddButton(addNewTransaction: _startAddNewTransaction),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
