@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:personal_expense/pages/home/widgets/category_widget.dart';
+
+import '../../../data/model/transaction.dart';
 
 class NewTransaction extends StatefulWidget {
   final Function addTransaction;
@@ -17,6 +20,7 @@ class _NewTransactionState extends State<NewTransaction> {
   final _inputKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
   String? _dateText;
+  int _selectedCategoryPosition = -1;
 
   @override
   void dispose() {
@@ -64,7 +68,6 @@ class _NewTransactionState extends State<NewTransaction> {
             bottom: MediaQuery.of(context).viewInsets.bottom
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Form(
               key: _inputKey,
@@ -120,31 +123,82 @@ class _NewTransactionState extends State<NewTransaction> {
                 ],
               ),
             ),
-            const SizedBox(height: 12,),
-            SizedBox(
-              height: 70,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text( _selectedDate == null
-                    ? _dateText = 'mm/dd/yyyy'
-                    : _dateText = "Picked date: ${DateFormat.yMd().format(_selectedDate!)}",
-                  ),
-                  TextButton(
-                    onPressed: _chooseDatePicker,
-                    style: TextButton.styleFrom(
-                      primary: Theme.of(context).colorScheme.primary
+            const SizedBox(height: 8,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: _selectedDate == null
+                        ? Theme.of(context).disabledColor
+                        : Theme.of(context).colorScheme.primary
                     ),
-                    child: const Text(
-                      'Choose Date',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Text( _selectedDate == null
+                    ? _dateText = 'mm/dd/yyyy'
+                    : _dateText = DateFormat.yMd().format(_selectedDate!),
+                    style: TextStyle(
+                      color: _selectedDate == null
+                        ? Theme.of(context).unselectedWidgetColor
+                        : Theme.of(context).colorScheme.primary
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: _chooseDatePicker,
+                  style: TextButton.styleFrom(
+                    primary: Theme.of(context).colorScheme.primary
+                  ),
+                  child: const Text(
+                    'Choose Date',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 8,),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                children: [
+                  Text(
+                    "Category",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  SizedBox(
+                    height: 65,
+                    child: ListView.builder(
+                      itemCount: categoryList.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final TransactionCategory selectedCategory = categoryList[index];
+                        return Row(
+                          children: [
+                            CategoryWidget(
+                              isSelected: _selectedCategoryPosition == index,
+                              selectedCategory: selectedCategory,
+                              itemPosition: index,
+                              onAreaClicked: (position) {
+                                _selectedCategoryPosition = index;
+                                setState(() {});
+                              },
+                            ),
+                            const SizedBox(width: 8,),
+                          ],
+                        );
+                      },
                     ),
                   )
                 ],
               ),
             ),
+            const SizedBox(height: 12,),
             ElevatedButton(
                 onPressed: () {
                   if (_inputKey.currentState!.validate() && _dateText != "mm/dd/yyyy") {
