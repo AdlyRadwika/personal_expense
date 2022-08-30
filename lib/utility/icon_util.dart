@@ -25,6 +25,8 @@ class IconUtil{
         return Icons.shopping_cart;
       case 'Others':
         return Icons.menu;
+      case 'Title':
+        return Icons.title;
       default:
         return Icons.attach_money;
     }

@@ -25,12 +25,13 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String title, double amount, DateTime chosenDate){
+  void _addNewTransaction(String title, double amount, DateTime chosenDate, String chosenCategory){
     final newTransaction = Transaction(
         id: DateTime.now().hashCode.toString(),
         title: title,
         amount: amount,
         date: chosenDate,
+        category: chosenCategory,
     );
     setState(() {
       _userTransaction.add(newTransaction);
@@ -49,13 +50,15 @@ class _HomePageState extends State<HomePage> {
       context: context,
       isScrollControlled: true,
       builder: (builderContext) {
-        return Wrap(
-          children: [
-            NewTransaction(
-              addTransaction: _addNewTransaction,
-              bottomSheetContext: context,
-            ),
-          ]
+        return Scaffold(
+          body: Wrap(
+            children: [
+              NewTransaction(
+                addTransaction: _addNewTransaction,
+                bottomSheetContext: builderContext,
+              ),
+            ],
+          ),
         );
       },
     );

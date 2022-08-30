@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/model/transaction.dart';
+import '../../../utility/icon_util.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
@@ -60,10 +61,12 @@ class TransactionList extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Card(
                     child: ListTile(
-                      leading: const CircleAvatar(
+                      leading: CircleAvatar(
                         radius: 30,
                         child: FittedBox(
-                          child: Icon(Icons.question_mark),
+                          child: Icon(
+                            IconUtil.getIconFromString(transactions[index].category)
+                          ),
                         ),
                       ),
                       title: Row(
@@ -82,8 +85,8 @@ class TransactionList extends StatelessWidget {
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            "Category"
+                          Text(
+                            transactions[index].category
                           ),
                           Text(
                             DateFormat.yMMMd().format(transactions[index].date),
