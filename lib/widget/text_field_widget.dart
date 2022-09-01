@@ -46,7 +46,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
             borderRadius: BorderRadius.all(Radius.circular(10))
         ),
         hintText: widget.hintText,
-        prefixIcon: Icon(IconUtil.getIconFromString(widget.icon)),
+        prefixIcon: Icon(
+          IconUtil.getIconFromString(widget.icon),
+          size: 26,
+        ),
         labelText: widget.labelText,
       ),
     );

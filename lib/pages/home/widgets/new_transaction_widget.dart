@@ -18,10 +18,12 @@ class NewTransaction extends StatefulWidget {
 class _NewTransactionState extends State<NewTransaction> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  final _dateController = TextEditingController();
   final _inputKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
   String? _dateText;
   int _selectedCategoryPosition = -1;
+  bool _isCategoryEmpty = false;
 
   @override
   void dispose() {
@@ -58,6 +60,8 @@ class _NewTransactionState extends State<NewTransaction> {
         return;
       }
       _selectedDate = value;
+      _dateText = DateFormat.yMd().format(_selectedDate!);
+      _dateController.text = _dateText!;
       setState(() {});
     });
   }
@@ -93,53 +97,68 @@ class _NewTransactionState extends State<NewTransaction> {
                     labelText: "Amount",
                     isNumber: true,
                   ),
+                  const SizedBox(height: 12,),
+                  TextFormField(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(FocusNode());
+                      _chooseDatePicker();
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Choose the date';
+                      }
+                      return null;
+                    },
+                    controller: _dateController,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      color: _selectedDate == null
+                          ? Theme.of(context).unselectedWidgetColor
+                          : Theme.of(context).colorScheme.primary,
+                    ),
+                    decoration: InputDecoration(
+                      isDense: true,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          borderSide: BorderSide(
+                            color: _selectedDate == null
+                                ? Theme.of(context).disabledColor
+                                : Theme.of(context).colorScheme.primary
+                          )
+                      ),
+                      prefixIcon: Icon(
+                        Icons.date_range,
+                        size: 26,
+                        color: _selectedDate == null
+                            ? Theme.of(context).unselectedWidgetColor
+                            : Theme.of(context).colorScheme.primary,
+                      ),
+                      label: Text(
+                        'Date',
+                        style: TextStyle(
+                          color: _selectedDate == null
+                              ? Theme.of(context).unselectedWidgetColor
+                              : Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                          color: Theme.of(context).errorColor
+                        )
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
             const SizedBox(height: 8,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: _selectedDate == null
-                        ? Theme.of(context).disabledColor
-                        : Theme.of(context).colorScheme.primary
-                    ),
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                  ),
-                  child: Text( _selectedDate == null
-                    ? _dateText = 'mm/dd/yyyy'
-                    : _dateText = DateFormat.yMd().format(_selectedDate!),
-                    style: TextStyle(
-                      color: _selectedDate == null
-                        ? Theme.of(context).unselectedWidgetColor
-                        : Theme.of(context).colorScheme.primary
-                    ),
-                  ),
-                ),
-                TextButton(
-                  onPressed: _chooseDatePicker,
-                  style: TextButton.styleFrom(
-                    primary: Theme.of(context).colorScheme.primary
-                  ),
-                  child: const Text(
-                    'Choose Date',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
-            ),
-            const SizedBox(height: 8,),
             Column(
               children: [
-                Text(
-                  "Category",
+                Text( _isCategoryEmpty == false
+                  ? "Category"
+                  : "Choose the category!",
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 SizedBox(
@@ -178,12 +197,9 @@ class _NewTransactionState extends State<NewTransaction> {
                           content: Text("Transaction has been added!"),
                           behavior: SnackBarBehavior.floating,
                         ));
-                  } else if (_dateText == "mm/dd/yyyy"){
-                    ScaffoldMessenger.of(widget.bottomSheetContext).showSnackBar(
-                        const SnackBar(
-                          content: Text("Choose the date!"),
-                          behavior: SnackBarBehavior.floating,
-                        ));
+                  } else if (_selectedCategoryPosition == -1) {
+                    _isCategoryEmpty = true;
+                    setState(() {});
                   }
                 },
                 child: const Text("Add Transaction"))

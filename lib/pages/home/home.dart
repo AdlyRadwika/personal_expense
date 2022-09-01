@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../data/model/transaction.dart';
 
@@ -27,7 +28,6 @@ class _HomePageState extends State<HomePage> {
 
   void _addNewTransaction(String title, double amount, DateTime chosenDate, String chosenCategory){
     final newTransaction = Transaction(
-        id: DateTime.now().hashCode.toString(),
         title: title,
         amount: amount,
         date: chosenDate,
@@ -39,27 +39,27 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _startAddNewTransaction(BuildContext context) {
-    showModalBottomSheet(
+    showMaterialModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(15),
           topRight: Radius.circular(15)
         )
       ),
+      isDismissible: true,
+      enableDrag: true,
+      bounce: true,
       backgroundColor: Colors.white,
       context: context,
-      isScrollControlled: true,
       builder: (builderContext) {
-        return Scaffold(
-          body: Wrap(
+        return Wrap(
             children: [
               NewTransaction(
                 addTransaction: _addNewTransaction,
                 bottomSheetContext: builderContext,
               ),
             ],
-          ),
-        );
+          );
       },
     );
   }

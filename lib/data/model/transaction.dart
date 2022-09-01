@@ -20,7 +20,7 @@ class Transaction {
   final String category;
 
   Transaction({
-    required this.id,
+    this.id,
     required this.title,
     required this.amount,
     required this.category,
