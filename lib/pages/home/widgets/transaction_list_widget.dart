@@ -13,28 +13,9 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? Padding(
-            padding: const EdgeInsets.only(top: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'There are no transactions!',
-                  style: Theme.of(context).textTheme.titleLarge,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 200,
-                  child: Image.asset(
-                    'assets/images/waiting.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ],
-            ),
-          )
+        ? const Center(
+          child: CircularProgressIndicator(),
+        )
         : Column(
             children: [
               Row(
@@ -55,7 +36,6 @@ class TransactionList extends StatelessWidget {
               ListView.builder(
                 primary: false,
                 shrinkWrap: true,
-                reverse: true,
                 itemCount: transactions.length <= 4 ? transactions.length : 4,
                 key: const Key('test'),
                 itemBuilder: (context, index) {

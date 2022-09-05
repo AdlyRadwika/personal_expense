@@ -47,6 +47,8 @@ class _NewTransactionState extends State<NewTransaction> {
     _amountController.clear();
     _selectedDate = null;
     _selectedCategoryPosition = -1;
+
+    Navigator.of(context).pop();
   }
 
   void _chooseDatePicker() {

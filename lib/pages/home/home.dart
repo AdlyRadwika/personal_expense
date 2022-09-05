@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 import '../../../data/model/transaction.dart';
+import 'package:personal_expense/data/database/transactions_database.dart';
 
 import 'package:personal_expense/pages/home/widgets/add_button_widget.dart';
 import 'package:personal_expense/pages/home/widgets/chart_widget.dart';
@@ -16,8 +17,27 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<Transaction> _userTransaction = [];
-  
+  late List<Transaction> _userTransaction = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    refreshTransactions();
+  }
+
+  @override
+  void dispose() {
+    TransactionsDb.instance.close();
+
+    super.dispose();
+  }
+
+  refreshTransactions() async {
+    _userTransaction = await TransactionsDb.instance.readAllTransactions();
+    setState(() {});
+  }
+
   List<Transaction> get _recentTransactions {
     return _userTransaction.where((tx) {
       return tx.date.isAfter(
@@ -26,16 +46,16 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  void _addNewTransaction(String title, double amount, DateTime chosenDate, String chosenCategory){
+  Future _addNewTransaction(String title, double amount, DateTime chosenDate, String chosenCategory) async {
     final newTransaction = Transaction(
         title: title,
         amount: amount,
         date: chosenDate,
         category: chosenCategory,
     );
-    setState(() {
-      _userTransaction.add(newTransaction);
-    });
+
+    await TransactionsDb.instance.createNewTransaction(newTransaction);
+    refreshTransactions();
   }
 
   void _startAddNewTransaction(BuildContext context) {
