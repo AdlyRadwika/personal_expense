@@ -1,0 +1,55 @@
+import 'package:flutter/material.dart';
+
+import 'package:personal_expense/data/database/transactions_database.dart';
+import 'package:personal_expense/data/model/transaction.dart';
+
+import 'package:personal_expense/pages/route.dart' as route;
+
+class UpdateDeleteWidget extends StatefulWidget {
+  final int? transactionId;
+
+  const UpdateDeleteWidget({Key? key, required this.transactionId}) : super(key: key);
+
+  @override
+  State<UpdateDeleteWidget> createState() => _UpdateDeleteWidgetState();
+}
+
+class _UpdateDeleteWidgetState extends State<UpdateDeleteWidget> {
+  late Transaction tx;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Theme.of(context).dialogBackgroundColor,
+          borderRadius: const BorderRadius.all(Radius.circular(15))
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushNamed(route.updatePage);
+              },
+              child: const Text("Update"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await TransactionsDb.instance.deleteTransaction(widget.transactionId!);
+
+                Navigator.of(context).pop();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Delete success!"),
+                    behavior: SnackBarBehavior.floating,
+                  )
+                );
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        ),
+      );
+  }
+}

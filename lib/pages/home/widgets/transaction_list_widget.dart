@@ -4,11 +4,12 @@ import 'package:intl/intl.dart';
 import '../../../data/model/transaction.dart';
 import '../../../utility/icon_util.dart';
 
+import 'package:personal_expense/pages/home/widgets/update_delete_widget.dart';
+
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
 
-  const TransactionList(
-      {Key? key, required this.transactions}) : super(key: key);
+  const TransactionList({Key? key, required this.transactions}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,38 +41,54 @@ class TransactionList extends StatelessWidget {
                 key: const Key('test'),
                 itemBuilder: (context, index) {
                   return Card(
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        radius: 30,
-                        child: FittedBox(
-                          child: Icon(
-                            IconUtil.getIconFromString(transactions[index].category)
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(context: context, builder: (context) {
+                          return Center(
+                            child: FractionallySizedBox(
+                              alignment: Alignment.center,
+                              heightFactor: 0.25,
+                              widthFactor: 0.5,
+                              child: UpdateDeleteWidget(
+                                transactionId: transactions[index].id,
+                              ),
+                            ),
+                          );
+                        });
+                      },
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          radius: 30,
+                          child: FittedBox(
+                            child: Icon(
+                                IconUtil.getIconFromString(transactions[index].category)
+                            ),
                           ),
                         ),
-                      ),
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            transactions[index].title,
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                          Text(
-                            NumberFormat.compactCurrency(locale: 'in_ID').format(transactions[index].amount),
-                            style: Theme.of(context).textTheme.titleSmall,
-                          ),
-                        ],
-                      ),
-                      subtitle: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            transactions[index].category
-                          ),
-                          Text(
-                            DateFormat.yMMMd().format(transactions[index].date),
-                          ),
-                        ],
+                        title: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              transactions[index].title,
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                            Text(
+                              NumberFormat.compactCurrency(locale: 'in_ID').format(transactions[index].amount),
+                              style: Theme.of(context).textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
+                        subtitle: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                                transactions[index].category
+                            ),
+                            Text(
+                              DateFormat.yMMMd().format(transactions[index].date),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );
