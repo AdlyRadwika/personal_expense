@@ -38,7 +38,10 @@ class _UpdateDeleteWidgetState extends State<UpdateDeleteWidget> {
               onPressed: () async {
                 await TransactionsDb.instance.deleteTransaction(widget.transactionId!);
 
-                Navigator.of(context).pop();
+                if(!mounted) return;
+
+                Navigator.of(context).pushNamedAndRemoveUntil(route.homePage, (route) => false);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text("Delete success!"),

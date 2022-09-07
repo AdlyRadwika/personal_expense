@@ -11,7 +11,8 @@ class AddButton extends StatelessWidget {
       onPressed: () => addNewTransaction(context),
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).colorScheme.secondary,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        elevation: 0,
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
