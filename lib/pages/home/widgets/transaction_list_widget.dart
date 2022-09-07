@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:empty_widget/empty_widget.dart';
 
 import '../../../data/model/transaction.dart';
 import '../../../utility/icon_util.dart';
@@ -9,14 +10,22 @@ import 'package:personal_expense/pages/home/widgets/update_delete_widget.dart';
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
 
-  const TransactionList({Key? key, required this.transactions}) : super(key: key);
+  const TransactionList({Key? key, required this.transactions})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? const Center(
-          child: CircularProgressIndicator(),
-        )
+        ? Center(
+            child: EmptyWidget(
+              image: null,
+              packageImage: PackageImage.Image_1,
+              title: 'No Transaction!',
+              subTitle: 'Add a new transaction below.',
+              titleTextStyle: Theme.of(context).textTheme.titleLarge,
+              subtitleTextStyle: Theme.of(context).textTheme.bodyMedium,
+            ),
+          )
         : Column(
             children: [
               Row(
@@ -43,26 +52,26 @@ class TransactionList extends StatelessWidget {
                   return Card(
                     child: InkWell(
                       onTap: () {
-                        showDialog(context: context, builder: (context) {
-                          return Center(
-                            child: FractionallySizedBox(
-                              alignment: Alignment.center,
-                              heightFactor: 0.25,
-                              widthFactor: 0.5,
-                              child: UpdateDeleteWidget(
-                                transactionId: transactions[index].id,
-                              ),
-                            ),
-                          );
-                        });
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return Center(
+                                child: FractionallySizedBox(
+                                  alignment: Alignment.center,
+                                  heightFactor: 0.25,
+                                  widthFactor: 0.5,
+                                  child: UpdateDeleteWidget(
+                                    transactionId: transactions[index].id,
+                                  ),
+                                ),
+                              );
+                            });
                       },
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: 30,
                           child: FittedBox(
-                            child: Icon(
-                                IconUtil.getIconFromString(transactions[index].category)
-                            ),
+                            child: Icon(IconUtil.getIconFromString(transactions[index].category)),
                           ),
                         ),
                         title: Row(
@@ -81,11 +90,8 @@ class TransactionList extends StatelessWidget {
                         subtitle: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                                transactions[index].category
-                            ),
-                            Text(
-                              DateFormat.yMMMd().format(transactions[index].date),
+                            Text(transactions[index].category),
+                            Text(DateFormat.yMMMd().format(transactions[index].date),
                             ),
                           ],
                         ),

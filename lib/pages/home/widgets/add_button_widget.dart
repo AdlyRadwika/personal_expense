@@ -17,7 +17,7 @@ class AddButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Text(
-          "Add new transactions",
+          "Add new transaction",
           style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
