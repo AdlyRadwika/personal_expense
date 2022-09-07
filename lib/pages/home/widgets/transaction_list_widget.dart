@@ -21,7 +21,7 @@ class TransactionList extends StatelessWidget {
               image: null,
               packageImage: PackageImage.Image_1,
               title: 'No Transaction!',
-              subTitle: 'Add a new transaction below.',
+              subTitle: 'Start by adding a new transaction',
               titleTextStyle: Theme.of(context).textTheme.titleLarge,
               subtitleTextStyle: Theme.of(context).textTheme.bodyMedium,
             ),
