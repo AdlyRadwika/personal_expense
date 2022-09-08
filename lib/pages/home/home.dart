@@ -18,7 +18,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late List<Transaction> _userTransaction = [];
-  bool? isAdded;
 
   @override
   void initState() {
@@ -57,7 +56,6 @@ class _HomePageState extends State<HomePage> {
 
     await TransactionsDb.instance.createNewTransaction(newTransaction);
     refreshTransactions();
-    isAdded = false;
   }
 
   void _startAddNewTransaction(BuildContext context) {
