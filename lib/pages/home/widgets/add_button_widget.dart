@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 
 class AddButton extends StatelessWidget {
-  final Function addNewTransaction;
+  final Function inputTransaction;
 
-  const AddButton({Key? key, required this.addNewTransaction}) : super(key: key);
+  const AddButton({Key? key, required this.inputTransaction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () => addNewTransaction(context),
+      onPressed: () {
+        const bool isUpdate = false;
+        inputTransaction(context, isUpdate);
+      },
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).colorScheme.secondary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

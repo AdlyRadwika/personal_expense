@@ -9,9 +9,9 @@ import 'package:personal_expense/pages/home/widgets/update_delete_widget.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final Function inputTransaction;
 
-  const TransactionList({Key? key, required this.transactions})
-      : super(key: key);
+  const TransactionList({Key? key, required this.transactions, required this.inputTransaction}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +62,8 @@ class TransactionList extends StatelessWidget {
                                   widthFactor: 0.5,
                                   child: UpdateDeleteWidget(
                                     transactionId: transactions[index].id,
+                                    inputTransaction: inputTransaction,
+                                    transactions: transactions[index],
                                   ),
                                 ),
                               );

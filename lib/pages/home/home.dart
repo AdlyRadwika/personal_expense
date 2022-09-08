@@ -7,10 +7,12 @@ import 'package:personal_expense/data/database/transactions_database.dart';
 import 'package:personal_expense/pages/home/widgets/add_button_widget.dart';
 import 'package:personal_expense/pages/home/widgets/chart_widget.dart';
 import 'package:personal_expense/pages/home/widgets/transaction_list_widget.dart';
-import 'package:personal_expense/pages/home/widgets/new_transaction_widget.dart';
+import 'package:personal_expense/pages/home/widgets/transaction_form_widget.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final Transaction? transactions;
+
+  const HomePage({Key? key, this.transactions}) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -46,7 +48,7 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  Future _addNewTransaction(String title, double amount, DateTime chosenDate, String chosenCategory) async {
+  Future _insertTransaction(String title, double amount, DateTime chosenDate, String chosenCategory) async {
     final newTransaction = Transaction(
         title: title,
         amount: amount,
@@ -58,7 +60,19 @@ class _HomePageState extends State<HomePage> {
     refreshTransactions();
   }
 
-  void _startAddNewTransaction(BuildContext context) {
+  Future _updateTransaction(Transaction transaction, String updatedTitle, double updatedAmount, DateTime updatedDate, String updatedCategory) async {
+    final updatedTransaction = transaction.copy(
+      title: updatedTitle,
+      amount: updatedAmount,
+      date: updatedDate,
+      category: updatedCategory,
+    );
+
+    await TransactionsDb.instance.updateTransaction(updatedTransaction);
+    refreshTransactions();
+  }
+
+  void _buildInputTransactionModal(BuildContext context, bool isUpdate, [Transaction? transaction]) {
     showMaterialModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -74,10 +88,9 @@ class _HomePageState extends State<HomePage> {
       builder: (builderContext) {
         return Wrap(
             children: [
-              NewTransaction(
-                addTransaction: _addNewTransaction,
-                bottomSheetContext: builderContext,
-              ),
+              isUpdate == true
+              ? TransactionForm(isUpdate: true, updateTransaction: _updateTransaction, transactions: transaction,)
+              : TransactionForm(isUpdate: false, addTransaction: _insertTransaction,)
             ],
           );
       },
@@ -91,7 +104,10 @@ class _HomePageState extends State<HomePage> {
         title: const Text("Personal Expense"),
         actions: [
           IconButton(
-            onPressed: () => _startAddNewTransaction(context),
+            onPressed: () {
+              const bool isUpdate = false;
+              _buildInputTransactionModal(context, isUpdate);
+            },
             icon: const Icon(Icons.add),
           ),
         ],
@@ -108,6 +124,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 12,),
               TransactionList(
                 transactions: _userTransaction,
+                inputTransaction: _buildInputTransactionModal,
               ),
             ],
           ),
@@ -116,7 +133,7 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar:Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         width: MediaQuery.of(context).size.width,
-        child: AddButton(addNewTransaction: _startAddNewTransaction),
+        child: AddButton(inputTransaction: _buildInputTransactionModal),
       ),
     );
   }

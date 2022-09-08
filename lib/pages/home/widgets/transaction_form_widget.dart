@@ -5,25 +5,37 @@ import '../../../data/model/transaction.dart';
 import 'package:personal_expense/pages/home/widgets/category_widget.dart';
 import 'package:personal_expense/widget/text_field_widget.dart';
 
-class NewTransaction extends StatefulWidget {
-  final Function addTransaction;
-  final BuildContext bottomSheetContext;
+class TransactionForm extends StatefulWidget {
+  final Function? addTransaction;
+  final Function? updateTransaction;
+  final bool isUpdate;
+  final Transaction? transactions;
 
-  const NewTransaction({Key? key, required this.addTransaction, required this.bottomSheetContext}) : super(key: key);
+  const TransactionForm({Key? key, this.addTransaction, this.updateTransaction, required this.isUpdate, this.transactions}) : super(key: key);
 
   @override
-  State<NewTransaction> createState() => _NewTransactionState();
+  State<TransactionForm> createState() => _TransactionFormState();
 }
 
-class _NewTransactionState extends State<NewTransaction> {
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
-  final _dateController = TextEditingController();
+class _TransactionFormState extends State<TransactionForm> {
+  late final _titleController = TextEditingController();
+  late final _amountController = TextEditingController();
+  late final _dateController = TextEditingController();
   final _inputKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
   String? _dateText;
   int _selectedCategoryPosition = -1;
   bool _isCategoryEmpty = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    //unfinished parsing the values
+    _titleController.text = widget.transactions?.title ?? '';
+    // _amountController.text = widget.transactions?.amount as String;
+
+  }
 
   @override
   void dispose() {
@@ -36,7 +48,7 @@ class _NewTransactionState extends State<NewTransaction> {
     final enteredTitle = _titleController.text;
     final enteredAmount = double.parse(_amountController.text);
 
-    widget.addTransaction(
+    widget.addTransaction!(
       enteredTitle,
       enteredAmount,
       _selectedDate!,
@@ -194,9 +206,12 @@ class _NewTransactionState extends State<NewTransaction> {
                 onPressed: () {
                   if (_inputKey.currentState!.validate() && _dateText != "mm/dd/yyyy" && _selectedCategoryPosition != -1) {
                     _submitData();
-                    ScaffoldMessenger.of(widget.bottomSheetContext).showSnackBar(
-                        const SnackBar(
-                          content: Text("Transaction has been added!"),
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text( widget.isUpdate == true
+                            ? "Transaction has been updated!"
+                            : "Transaction has been added!"
+                          ),
                           behavior: SnackBarBehavior.floating,
                         ));
                   } else if (_selectedCategoryPosition == -1) {
@@ -204,7 +219,10 @@ class _NewTransactionState extends State<NewTransaction> {
                     setState(() {});
                   }
                 },
-                child: const Text("Add Transaction"))
+                child: Text(widget.isUpdate == true
+                  ? "Update Transaction"
+                  : "Add Transaction"
+                ))
           ],
         ),
       ),

@@ -7,16 +7,16 @@ import 'package:personal_expense/pages/route.dart' as route;
 
 class UpdateDeleteWidget extends StatefulWidget {
   final int? transactionId;
+  final Function inputTransaction;
+  final Transaction? transactions;
 
-  const UpdateDeleteWidget({Key? key, required this.transactionId}) : super(key: key);
+  const UpdateDeleteWidget({Key? key, required this.transactionId, required this.inputTransaction, this.transactions}) : super(key: key);
 
   @override
   State<UpdateDeleteWidget> createState() => _UpdateDeleteWidgetState();
 }
 
 class _UpdateDeleteWidgetState extends State<UpdateDeleteWidget> {
-  late Transaction tx;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,7 +30,10 @@ class _UpdateDeleteWidgetState extends State<UpdateDeleteWidget> {
           children: [
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pushNamed(route.updatePage);
+                Navigator.of(context).pop();
+
+                const isUpdate = true;
+                widget.inputTransaction(context, isUpdate, widget.transactions);
               },
               child: const Text("Update"),
             ),
