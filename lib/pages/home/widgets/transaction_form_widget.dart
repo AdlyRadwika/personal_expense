@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../data/model/transaction.dart';
-import 'package:personal_expense/pages/home/widgets/category_widget.dart';
+import 'package:personal_expense/utility/icon_util.dart';
+
 import 'package:personal_expense/widget/text_field_widget.dart';
+import 'package:personal_expense/pages/home/widgets/category_widget.dart';
 
 class TransactionForm extends StatefulWidget {
   final Function? addTransaction;
@@ -24,17 +26,21 @@ class _TransactionFormState extends State<TransactionForm> {
   final _inputKey = GlobalKey<FormState>();
   DateTime? _selectedDate;
   String? _dateText;
-  int _selectedCategoryPosition = -1;
+  late int _selectedCategoryPosition;
   bool _isCategoryEmpty = false;
+  String? _formattedAmount;
 
   @override
   void initState() {
     super.initState();
 
-    //unfinished parsing the values
     _titleController.text = widget.transactions?.title ?? '';
-    // _amountController.text = widget.transactions?.amount as String;
-
+    _formattedAmount = removeTwoChars(widget.transactions?.amount.toString() ?? '');
+    _amountController.text =  _formattedAmount!;
+    _selectedDate = widget.transactions?.date ?? DateTime.now();
+    _dateText = DateFormat.yMd().format(_selectedDate!);
+    _dateController.text = _dateText!;
+    _selectedCategoryPosition = IconUtil.getIconNumberFromString(widget.transactions?.category);
   }
 
   @override
@@ -44,16 +50,32 @@ class _TransactionFormState extends State<TransactionForm> {
     super.dispose();
   }
 
-  void _submitData() {
-    final enteredTitle = _titleController.text;
-    final enteredAmount = double.parse(_amountController.text);
+  String? removeTwoChars (String? str) {
+    if (str!.isNotEmpty) {
+      return str = str.substring(0, str.length - 2);
+    }
 
-    widget.addTransaction!(
-      enteredTitle,
-      enteredAmount,
-      _selectedDate!,
-      categoryList[_selectedCategoryPosition].name,
-    );
+    return '';
+  }
+
+  void _submitData() {
+    final titleValue = _titleController.text;
+    final amountValue = double.parse(_amountController.text);
+
+    widget.isUpdate == true
+    ? widget.updateTransaction!(
+        widget.transactions,
+        titleValue,
+        amountValue,
+        _selectedDate,
+        categoryList[_selectedCategoryPosition].name,
+      )
+    : widget.addTransaction!(
+        titleValue,
+        amountValue,
+        _selectedDate!,
+        categoryList[_selectedCategoryPosition].name,
+      );
 
     _titleController.clear();
     _amountController.clear();
@@ -101,6 +123,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     hintText: "Bought new game",
                     icon: "Title",
                     labelText: "Title",
+                    isNumber: false,
                   ),
                   const SizedBox(height: 12,),
                   CustomTextField(
@@ -118,12 +141,13 @@ class _TransactionFormState extends State<TransactionForm> {
                       _chooseDatePicker();
                     },
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null) {
                         return 'Choose the date';
                       }
                       return null;
                     },
                     controller: _dateController,
+                    readOnly: true,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,

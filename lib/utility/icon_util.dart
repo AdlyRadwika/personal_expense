@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:personal_expense/data/model/transaction.dart';
 
 class IconUtil{
   static IconData getIconFromString(String icon){
@@ -30,5 +31,14 @@ class IconUtil{
       default:
         return Icons.attach_money;
     }
+  }
+
+  static int getIconNumberFromString(String? icon) {
+    for (int i=0; i<categoryList.length; i++) {
+      if (icon == categoryList[i].name) {
+        return i;
+      }
+    }
+    return -1;
   }
 }

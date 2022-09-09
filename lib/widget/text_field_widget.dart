@@ -4,7 +4,7 @@ import '../utility/icon_util.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController textEditingController;
-  final bool? isNumber;
+  final bool isNumber;
   final String emptyWarning;
   final String icon;
   final String labelText;
@@ -12,11 +12,11 @@ class CustomTextField extends StatefulWidget {
 
   const CustomTextField({Key? key,
     required this.textEditingController,
-    this.isNumber,
+    required this.isNumber,
     required this.emptyWarning,
     required this.hintText,
     required this.icon,
-    required this.labelText
+    required this.labelText,
   }) : super(key: key);
 
   @override
@@ -29,7 +29,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.textEditingController,
-      keyboardType: widget.isNumber == null ? TextInputType.text : TextInputType.number,
+      keyboardType: widget.isNumber == true ? TextInputType.number : TextInputType.text,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return widget.emptyWarning;
