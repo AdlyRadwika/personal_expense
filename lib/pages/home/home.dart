@@ -72,6 +72,11 @@ class _HomePageState extends State<HomePage> {
     refreshTransactions();
   }
 
+  Future _deleteTransaction(int id) async {
+    await TransactionsDb.instance.deleteTransaction(id);
+    refreshTransactions();
+  }
+
   void _buildInputTransactionModal(BuildContext context, bool isUpdate, [Transaction? transaction]) {
     showMaterialModalBottomSheet(
       shape: const RoundedRectangleBorder(
@@ -124,7 +129,8 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(height: 12,),
               TransactionList(
                 transactions: _userTransaction,
-                inputTransaction: _buildInputTransactionModal,
+                inputTransactionModal: _buildInputTransactionModal,
+                deleteTransaction: _deleteTransaction,
               ),
             ],
           ),
