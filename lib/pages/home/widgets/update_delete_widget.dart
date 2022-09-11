@@ -45,7 +45,7 @@ class _UpdateDeleteWidgetState extends State<UpdateDeleteWidget> {
 
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text("Delete success!"),
+                    content: Text("Transaction has been deleted!"),
                     behavior: SnackBarBehavior.floating,
                   )
                 );

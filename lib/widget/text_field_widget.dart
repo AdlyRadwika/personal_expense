@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:pattern_formatter/pattern_formatter.dart';
 
 import '../utility/icon_util.dart';
 
@@ -30,6 +32,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return TextFormField(
       controller: widget.textEditingController,
       keyboardType: widget.isNumber == true ? TextInputType.number : TextInputType.text,
+      inputFormatters: widget.isNumber == true ? <TextInputFormatter>[ThousandsFormatter()] : null,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return widget.emptyWarning;

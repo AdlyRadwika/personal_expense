@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Transaction> _userTransaction = [];
+  late List<Transaction> _transactions = [];
 
   @override
   void initState() {
@@ -33,48 +33,6 @@ class _HomePageState extends State<HomePage> {
     TransactionsDb.instance.close();
 
     super.dispose();
-  }
-
-  refreshTransactions() async {
-    _userTransaction = await TransactionsDb.instance.readAllTransactions();
-    setState(() {});
-  }
-
-  List<Transaction> get _recentTransactions {
-    return _userTransaction.where((tx) {
-      return tx.date.isAfter(
-        DateTime.now().subtract(const Duration(days: 7))
-      );
-    }).toList();
-  }
-
-  Future _insertTransaction(String title, double amount, DateTime chosenDate, String chosenCategory) async {
-    final newTransaction = Transaction(
-        title: title,
-        amount: amount,
-        date: chosenDate,
-        category: chosenCategory,
-    );
-
-    await TransactionsDb.instance.createNewTransaction(newTransaction);
-    refreshTransactions();
-  }
-
-  Future _updateTransaction(Transaction transaction, String updatedTitle, double updatedAmount, DateTime updatedDate, String updatedCategory) async {
-    final updatedTransaction = transaction.copy(
-      title: updatedTitle,
-      amount: updatedAmount,
-      date: updatedDate,
-      category: updatedCategory,
-    );
-
-    await TransactionsDb.instance.updateTransaction(updatedTransaction);
-    refreshTransactions();
-  }
-
-  Future _deleteTransaction(int id) async {
-    await TransactionsDb.instance.deleteTransaction(id);
-    refreshTransactions();
   }
 
   void _buildInputTransactionModal(BuildContext context, bool isUpdate, [Transaction? transaction]) {
@@ -124,11 +82,11 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: <Widget> [
               Chart(
-                recentTransactions: _recentTransactions,
+                recentTransactions: _sevenDaysTransaction,
               ),
               const SizedBox(height: 12,),
               TransactionList(
-                transactions: _userTransaction,
+                transactions: _transactions,
                 inputTransactionModal: _buildInputTransactionModal,
                 deleteTransaction: _deleteTransaction,
               ),
@@ -136,11 +94,53 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-      bottomNavigationBar:Container(
+      bottomNavigationBar: Container(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
         width: MediaQuery.of(context).size.width,
-        child: AddButton(inputTransaction: _buildInputTransactionModal),
+        child: AddButton(inputTransactionModal: _buildInputTransactionModal),
       ),
     );
+  }
+
+  refreshTransactions() async {
+    _transactions = await TransactionsDb.instance.readAllTransactions();
+    setState(() {});
+  }
+
+  List<Transaction> get _sevenDaysTransaction {
+    return _transactions.where((tx) {
+      return tx.date.isAfter(
+          DateTime.now().subtract(const Duration(days: 7))
+      );
+    }).toList();
+  }
+
+  Future _insertTransaction(String title, double amount, DateTime chosenDate, String chosenCategory) async {
+    final newTransaction = Transaction(
+      title: title,
+      amount: amount,
+      date: chosenDate,
+      category: chosenCategory,
+    );
+
+    await TransactionsDb.instance.createNewTransaction(newTransaction);
+    refreshTransactions();
+  }
+
+  Future _updateTransaction(Transaction transaction, String updatedTitle, double updatedAmount, DateTime updatedDate, String updatedCategory) async {
+    final updatedTransaction = transaction.copy(
+      title: updatedTitle,
+      amount: updatedAmount,
+      date: updatedDate,
+      category: updatedCategory,
+    );
+
+    await TransactionsDb.instance.updateTransaction(updatedTransaction);
+    refreshTransactions();
+  }
+
+  Future _deleteTransaction(int id) async {
+    await TransactionsDb.instance.deleteTransaction(id);
+    refreshTransactions();
   }
 }

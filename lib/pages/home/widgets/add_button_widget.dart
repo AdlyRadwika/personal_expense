@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AddButton extends StatelessWidget {
-  final Function inputTransaction;
+  final Function inputTransactionModal;
 
-  const AddButton({Key? key, required this.inputTransaction}) : super(key: key);
+  const AddButton({Key? key, required this.inputTransactionModal}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () {
         const bool isUpdate = false;
-        inputTransaction(context, isUpdate);
+        inputTransactionModal(context, isUpdate);
       },
       style: ElevatedButton.styleFrom(
         primary: Theme.of(context).colorScheme.secondary,

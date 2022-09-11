@@ -35,8 +35,8 @@ class _TransactionFormState extends State<TransactionForm> {
     super.initState();
 
     _titleController.text = widget.transactions?.title ?? '';
-    _formattedAmount = removeTwoChars(widget.transactions?.amount.toString() ?? '');
-    _amountController.text =  _formattedAmount!;
+    _formattedAmount = NumberFormat.decimalPattern().format(widget.transactions?.amount ?? 0);
+    _amountController.text =  zeroToNull(_formattedAmount)!;
     _selectedDate = widget.transactions?.date ?? DateTime.now();
     _dateText = DateFormat.yMd().format(_selectedDate!);
     _dateController.text = _dateText!;
@@ -50,17 +50,23 @@ class _TransactionFormState extends State<TransactionForm> {
     super.dispose();
   }
 
-  String? removeTwoChars (String? str) {
-    if (str!.isNotEmpty) {
-      return str = str.substring(0, str.length - 2);
+  String? zeroToNull (String? str) {
+    if (str == '0') {
+      return '';
     }
-
+    return str;
+  }
+  
+  String? removeComma (String? str) {
+    if(str!.isNotEmpty) {
+      return str = str.replaceFirst(',', '');
+    }
     return '';
   }
 
   void _submitData() {
     final titleValue = _titleController.text;
-    final amountValue = double.parse(_amountController.text);
+    final amountValue = double.parse(removeComma(_amountController.text)!);
 
     widget.isUpdate == true
     ? widget.updateTransaction!(
@@ -129,7 +135,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   CustomTextField(
                     textEditingController: _amountController,
                     emptyWarning: "Input the amount",
-                    hintText: "50.000",
+                    hintText: "50,000",
                     icon: "Money",
                     labelText: "Amount",
                     isNumber: true,
@@ -228,7 +234,7 @@ class _TransactionFormState extends State<TransactionForm> {
             const SizedBox(height: 12,),
             ElevatedButton(
                 onPressed: () {
-                  if (_inputKey.currentState!.validate() && _dateText != "mm/dd/yyyy" && _selectedCategoryPosition != -1) {
+                  if (_inputKey.currentState!.validate() && _selectedCategoryPosition != -1) {
                     _submitData();
                     ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
