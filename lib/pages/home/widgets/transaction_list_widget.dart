@@ -5,14 +5,16 @@ import 'package:empty_widget/empty_widget.dart';
 import '../../../data/model/transaction.dart';
 import '../../../utility/icon_util.dart';
 
+import 'package:personal_expense/pages/route.dart' as route;
 import 'package:personal_expense/pages/home/widgets/update_delete_widget.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
   final Function inputTransactionModal;
   final Function deleteTransaction;
+  final bool isRecent;
 
-  const TransactionList({Key? key, required this.transactions, required this.inputTransactionModal, required this.deleteTransaction}) : super(key: key);
+  const TransactionList({Key? key, required this.transactions, required this.inputTransactionModal, required this.deleteTransaction, required this.isRecent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,25 +31,34 @@ class TransactionList extends StatelessWidget {
           )
         : Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Recent Transactions",
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      debugPrint("Hello");
-                    },
-                    child: const Text("View all"),
-                  )
-                ],
-              ),
+              isRecent == true
+                ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Recent Transactions",
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        LogsPageArguments arguments = LogsPageArguments(
+                          transactions: transactions,
+                          inputTransactionModal: inputTransactionModal,
+                          deleteTransaction: deleteTransaction
+                        );
+                        Navigator.of(context).pushNamed(route.logsPage, arguments: arguments);
+                      },
+                      child: const Text("View all"),
+                    )
+                  ],
+                )
+                : const SizedBox(height: 5),
               ListView.builder(
                 primary: false,
                 shrinkWrap: true,
-                itemCount: transactions.length <= 4 ? transactions.length : 4,
+                itemCount: isRecent == true
+                  ? transactions.length <= 4 ? transactions.length : 4
+                  : transactions.length,
                 key: const Key('test'),
                 itemBuilder: (context, index) {
                   return Card(
@@ -107,4 +118,12 @@ class TransactionList extends StatelessWidget {
             ],
           );
   }
+}
+
+class LogsPageArguments {
+  final List<Transaction> transactions;
+  final Function inputTransactionModal;
+  final Function deleteTransaction;
+
+  LogsPageArguments({required this.transactions, required this.inputTransactionModal, required this.deleteTransaction});
 }

@@ -71,12 +71,13 @@ class _HomePageState extends State<HomePage> {
               const bool isUpdate = false;
               _buildInputTransactionModal(context, isUpdate);
             },
+            tooltip: 'Add Transaction',
             icon: const Icon(Icons.add),
           ),
         ],
       ),
       body: Container(
-        padding: const EdgeInsets.all(15),
+        margin: const EdgeInsets.all(15),
         child: SingleChildScrollView(
           primary: true,
           child: Column(
@@ -86,6 +87,7 @@ class _HomePageState extends State<HomePage> {
               ),
               const SizedBox(height: 12,),
               TransactionList(
+                isRecent: true,
                 transactions: _transactions,
                 inputTransactionModal: _buildInputTransactionModal,
                 deleteTransaction: _deleteTransaction,
