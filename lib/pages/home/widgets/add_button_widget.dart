@@ -13,7 +13,7 @@ class AddButton extends StatelessWidget {
         inputTransactionModal(context, isUpdate);
       },
       style: ElevatedButton.styleFrom(
-        primary: Theme.of(context).colorScheme.secondary,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         elevation: 0,
       ),

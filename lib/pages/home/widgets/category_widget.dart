@@ -18,11 +18,9 @@ class CategoryWidget extends StatelessWidget {
         onAreaClicked(itemPosition);
       },
       style: OutlinedButton.styleFrom(
-        primary: isSelected
+        foregroundColor: isSelected
           ? Theme.of(context).colorScheme.primary
-          : Theme.of(context).unselectedWidgetColor
-        ,
-        side: BorderSide(
+          : Theme.of(context).unselectedWidgetColor, side: BorderSide(
           color: isSelected
             ? Theme.of(context).colorScheme.primary
             : Theme.of(context).disabledColor

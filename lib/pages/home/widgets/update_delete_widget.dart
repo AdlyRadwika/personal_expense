@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:personal_expense/data/model/transaction.dart';
 
-import 'package:personal_expense/pages/route.dart' as route;
-
 class UpdateDeleteWidget extends StatefulWidget {
   final int? transactionId;
   final Function updateTransaction;
