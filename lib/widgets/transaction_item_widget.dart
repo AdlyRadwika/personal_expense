@@ -8,13 +8,19 @@ import '../utility/icon_util.dart';
 import 'package:personal_expense/pages/route.dart' as route;
 import 'package:personal_expense/pages/home/widgets/update_delete_widget.dart';
 
-class TransactionList extends StatelessWidget {
+class TransactionItem extends StatelessWidget {
   final List<Transaction> transactions;
   final Function inputTransactionModal;
   final Function deleteTransaction;
   final bool isRecent;
 
-  const TransactionList({Key? key, required this.transactions, required this.inputTransactionModal, required this.deleteTransaction, required this.isRecent}) : super(key: key);
+  const TransactionItem(
+      {Key? key,
+      required this.transactions,
+      required this.inputTransactionModal,
+      required this.deleteTransaction,
+      required this.isRecent})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,33 +38,35 @@ class TransactionList extends StatelessWidget {
         : Column(
             children: [
               isRecent == true
-                ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Recent Transactions",
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        LogsPageArguments arguments = LogsPageArguments(
-                          transactions: transactions,
-                          inputTransactionModal: inputTransactionModal,
-                          deleteTransaction: deleteTransaction
-                        );
-                        Navigator.of(context).pushNamed(route.logsPage, arguments: arguments);
-                      },
-                      child: const Text("View all"),
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Recent Transactions",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            LogsPageArguments arguments = LogsPageArguments(
+                                transactions: transactions,
+                                inputTransactionModal: inputTransactionModal,
+                                deleteTransaction: deleteTransaction);
+                            Navigator.of(context).pushNamed(route.logsPage,
+                                arguments: arguments);
+                          },
+                          child: const Text("View all"),
+                        )
+                      ],
                     )
-                  ],
-                )
-                : const SizedBox(height: 5),
+                  : const SizedBox(height: 5),
               ListView.builder(
                 primary: false,
                 shrinkWrap: true,
                 itemCount: isRecent == true
-                  ? transactions.length <= 4 ? transactions.length : 4
-                  : transactions.length,
+                    ? transactions.length <= 4
+                        ? transactions.length
+                        : 4
+                    : transactions.length,
                 key: const Key('test'),
                 itemBuilder: (context, index) {
                   return Card(
@@ -86,7 +94,8 @@ class TransactionList extends StatelessWidget {
                         leading: CircleAvatar(
                           radius: 30,
                           child: FittedBox(
-                            child: Icon(IconUtil.getIconFromString(transactions[index].category)),
+                            child: Icon(IconUtil.getIconFromString(
+                                transactions[index].category)),
                           ),
                         ),
                         title: Row(
@@ -97,7 +106,8 @@ class TransactionList extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             Text(
-                              NumberFormat.compactCurrency(locale: 'in_ID').format(transactions[index].amount),
+                              NumberFormat.compactCurrency(locale: 'in_ID')
+                                  .format(transactions[index].amount),
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                           ],
@@ -106,7 +116,9 @@ class TransactionList extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(transactions[index].category),
-                            Text(DateFormat.yMMMd().format(transactions[index].date),
+                            Text(
+                              DateFormat.yMMMd()
+                                  .format(transactions[index].date),
                             ),
                           ],
                         ),
@@ -125,5 +137,8 @@ class LogsPageArguments {
   final Function inputTransactionModal;
   final Function deleteTransaction;
 
-  LogsPageArguments({required this.transactions, required this.inputTransactionModal, required this.deleteTransaction});
+  LogsPageArguments(
+      {required this.transactions,
+      required this.inputTransactionModal,
+      required this.deleteTransaction});
 }

@@ -12,7 +12,8 @@ class CustomTextField extends StatefulWidget {
   final String labelText;
   final String hintText;
 
-  const CustomTextField({Key? key,
+  const CustomTextField({
+    Key? key,
     required this.textEditingController,
     required this.isNumber,
     required this.emptyWarning,
@@ -26,28 +27,26 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.textEditingController,
-      keyboardType: widget.isNumber == true ? TextInputType.number : TextInputType.text,
-      inputFormatters: widget.isNumber == true ? <TextInputFormatter>[ThousandsFormatter()] : null,
+      keyboardType:
+          widget.isNumber == true ? TextInputType.number : TextInputType.text,
+      inputFormatters: widget.isNumber == true
+          ? <TextInputFormatter>[ThousandsFormatter()]
+          : null,
       validator: (value) {
         if (value == null || value.isEmpty) {
           return widget.emptyWarning;
         }
         return null;
       },
-      style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w500
-      ),
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         isDense: true,
         border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10))
-        ),
+            borderRadius: BorderRadius.all(Radius.circular(10))),
         hintText: widget.hintText,
         prefixIcon: Icon(
           IconUtil.getIconFromString(widget.icon),

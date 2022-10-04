@@ -29,7 +29,7 @@ class LogsPage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TransactionList(
+              TransactionItem(
                 isRecent: false,
                 transactions: transactions,
                 inputTransactionModal: inputTransactionModal,

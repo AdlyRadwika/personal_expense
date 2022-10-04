@@ -40,7 +40,8 @@ class TransactionsDb {
     ''');
   }
 
-  Future<tx.Transaction> createNewTransaction(tx.Transaction transaction) async {
+  Future<tx.Transaction> createNewTransaction(
+      tx.Transaction transaction) async {
     final db = await instance.database;
 
     final id = await db.insert(tx.tableTransactions, transaction.toJson());
@@ -57,7 +58,7 @@ class TransactionsDb {
       whereArgs: [id],
     );
 
-    if (maps.isNotEmpty){
+    if (maps.isNotEmpty) {
       return tx.Transaction.fromJson(maps.first);
     } else {
       throw Exception('ID $id is not found');
@@ -94,7 +95,7 @@ class TransactionsDb {
     );
   }
 
-  Future close() async{
+  Future close() async {
     final db = await instance.database;
     _database = null;
     db.close();

@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 12,
               ),
-              TransactionList(
+              TransactionItem(
                 isRecent: true,
                 transactions: _transactions,
                 inputTransactionModal: _buildInputTransactionModal,

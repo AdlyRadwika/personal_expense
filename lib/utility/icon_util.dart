@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:personal_expense/data/model/transaction.dart';
 
-class IconUtil{
-  static IconData getIconFromString(String icon){
-    switch(icon){
+class IconUtil {
+  static IconData getIconFromString(String icon) {
+    switch (icon) {
       case 'Snack':
         return Icons.icecream;
       case 'Food':
@@ -34,7 +34,7 @@ class IconUtil{
   }
 
   static int getIconNumberFromString(String? icon) {
-    for (int i=0; i<categoryList.length; i++) {
+    for (int i = 0; i < categoryList.length; i++) {
       if (icon == categoryList[i].name) {
         return i;
       }
