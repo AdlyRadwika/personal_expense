@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AddButton extends StatelessWidget {
   final Function inputTransactionModal;
 
-  const AddButton({Key? key, required this.inputTransactionModal}) : super(key: key);
+  const AddButton({Key? key, required this.inputTransactionModal})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

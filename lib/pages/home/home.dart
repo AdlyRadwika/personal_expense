@@ -6,7 +6,7 @@ import 'package:personal_expense/data/database/transactions_database.dart';
 
 import 'package:personal_expense/pages/home/widgets/add_button_widget.dart';
 import 'package:personal_expense/pages/home/widgets/chart_widget.dart';
-import 'package:personal_expense/widgets/transaction_list_widget.dart';
+import 'package:personal_expense/widgets/transaction_item_widget.dart';
 import 'package:personal_expense/pages/home/widgets/transaction_form_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,14 +35,12 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-  void _buildInputTransactionModal(BuildContext context, bool isUpdate, [Transaction? transaction]) {
+  void _buildInputTransactionModal(BuildContext context, bool isUpdate,
+      [Transaction? transaction]) {
     showMaterialModalBottomSheet(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(15),
-          topRight: Radius.circular(15)
-        )
-      ),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(15), topRight: Radius.circular(15))),
       isDismissible: true,
       enableDrag: true,
       bounce: true,
@@ -50,12 +48,19 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (builderContext) {
         return Wrap(
-            children: [
-              isUpdate == true
-              ? TransactionForm(isUpdate: true, updateTransaction: _updateTransaction, transactions: transaction,)
-              : TransactionForm(isUpdate: false, addTransaction: _insertTransaction,)
-            ],
-          );
+          children: [
+            isUpdate == true
+                ? TransactionForm(
+                    isUpdate: true,
+                    updateTransaction: _updateTransaction,
+                    transactions: transaction,
+                  )
+                : TransactionForm(
+                    isUpdate: false,
+                    addTransaction: _insertTransaction,
+                  )
+          ],
+        );
       },
     );
   }
@@ -81,11 +86,13 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           primary: true,
           child: Column(
-            children: <Widget> [
+            children: <Widget>[
               Chart(
                 recentTransactions: _sevenDaysTransaction,
               ),
-              const SizedBox(height: 12,),
+              const SizedBox(
+                height: 12,
+              ),
               TransactionList(
                 isRecent: true,
                 transactions: _transactions,
@@ -111,13 +118,12 @@ class _HomePageState extends State<HomePage> {
 
   List<Transaction> get _sevenDaysTransaction {
     return _transactions.where((tx) {
-      return tx.date.isAfter(
-          DateTime.now().subtract(const Duration(days: 7))
-      );
+      return tx.date.isAfter(DateTime.now().subtract(const Duration(days: 7)));
     }).toList();
   }
 
-  Future _insertTransaction(String title, double amount, DateTime chosenDate, String chosenCategory) async {
+  Future _insertTransaction(String title, double amount, DateTime chosenDate,
+      String chosenCategory) async {
     final newTransaction = Transaction(
       title: title,
       amount: amount,
@@ -129,7 +135,12 @@ class _HomePageState extends State<HomePage> {
     refreshTransactions();
   }
 
-  Future _updateTransaction(Transaction transaction, String updatedTitle, double updatedAmount, DateTime updatedDate, String updatedCategory) async {
+  Future _updateTransaction(
+      Transaction transaction,
+      String updatedTitle,
+      double updatedAmount,
+      DateTime updatedDate,
+      String updatedCategory) async {
     final updatedTransaction = transaction.copy(
       title: updatedTitle,
       amount: updatedAmount,

@@ -13,7 +13,13 @@ class TransactionForm extends StatefulWidget {
   final bool isUpdate;
   final Transaction? transactions;
 
-  const TransactionForm({Key? key, this.addTransaction, this.updateTransaction, required this.isUpdate, this.transactions}) : super(key: key);
+  const TransactionForm(
+      {Key? key,
+      this.addTransaction,
+      this.updateTransaction,
+      required this.isUpdate,
+      this.transactions})
+      : super(key: key);
 
   @override
   State<TransactionForm> createState() => _TransactionFormState();
@@ -35,12 +41,14 @@ class _TransactionFormState extends State<TransactionForm> {
     super.initState();
 
     _titleController.text = widget.transactions?.title ?? '';
-    _formattedAmount = NumberFormat.decimalPattern().format(widget.transactions?.amount ?? 0);
-    _amountController.text =  zeroToNull(_formattedAmount)!;
+    _formattedAmount =
+        NumberFormat.decimalPattern().format(widget.transactions?.amount ?? 0);
+    _amountController.text = zeroToNull(_formattedAmount)!;
     _selectedDate = widget.transactions?.date ?? DateTime.now();
     _dateText = DateFormat.yMd().format(_selectedDate!);
     _dateController.text = _dateText!;
-    _selectedCategoryPosition = IconUtil.getIconNumberFromString(widget.transactions?.category);
+    _selectedCategoryPosition =
+        IconUtil.getIconNumberFromString(widget.transactions?.category);
   }
 
   @override
@@ -50,15 +58,15 @@ class _TransactionFormState extends State<TransactionForm> {
     super.dispose();
   }
 
-  String? zeroToNull (String? str) {
+  String? zeroToNull(String? str) {
     if (str == '0') {
       return '';
     }
     return str;
   }
-  
-  String? removeComma (String? str) {
-    if(str!.isNotEmpty) {
+
+  String? removeComma(String? str) {
+    if (str!.isNotEmpty) {
       return str = str.replaceFirst(',', '');
     }
     return '';
@@ -69,19 +77,19 @@ class _TransactionFormState extends State<TransactionForm> {
     final amountValue = double.parse(removeComma(_amountController.text)!);
 
     widget.isUpdate == true
-    ? widget.updateTransaction!(
-        widget.transactions,
-        titleValue,
-        amountValue,
-        _selectedDate,
-        categoryList[_selectedCategoryPosition].name,
-      )
-    : widget.addTransaction!(
-        titleValue,
-        amountValue,
-        _selectedDate!,
-        categoryList[_selectedCategoryPosition].name,
-      );
+        ? widget.updateTransaction!(
+            widget.transactions,
+            titleValue,
+            amountValue,
+            _selectedDate,
+            categoryList[_selectedCategoryPosition].name,
+          )
+        : widget.addTransaction!(
+            titleValue,
+            amountValue,
+            _selectedDate!,
+            categoryList[_selectedCategoryPosition].name,
+          );
 
     _titleController.clear();
     _amountController.clear();
@@ -93,11 +101,11 @@ class _TransactionFormState extends State<TransactionForm> {
 
   void _chooseDatePicker() {
     showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2022),
-      lastDate: DateTime.now()
-    ).then((value) {
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(2022),
+            lastDate: DateTime.now())
+        .then((value) {
       if (value == null) {
         return;
       }
@@ -113,9 +121,8 @@ class _TransactionFormState extends State<TransactionForm> {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Padding(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom
-        ),
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           children: [
             Form(
@@ -131,7 +138,9 @@ class _TransactionFormState extends State<TransactionForm> {
                     labelText: "Title",
                     isNumber: false,
                   ),
-                  const SizedBox(height: 12,),
+                  const SizedBox(
+                    height: 12,
+                  ),
                   CustomTextField(
                     textEditingController: _amountController,
                     emptyWarning: "Input the amount",
@@ -140,7 +149,9 @@ class _TransactionFormState extends State<TransactionForm> {
                     labelText: "Amount",
                     isNumber: true,
                   ),
-                  const SizedBox(height: 12,),
+                  const SizedBox(
+                    height: 12,
+                  ),
                   TextFormField(
                     onTap: () {
                       FocusScope.of(context).requestFocus(FocusNode());
@@ -164,13 +175,12 @@ class _TransactionFormState extends State<TransactionForm> {
                     decoration: InputDecoration(
                       isDense: true,
                       enabledBorder: OutlineInputBorder(
-                          borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide(
-                            color: _selectedDate == null
-                                ? Theme.of(context).disabledColor
-                                : Theme.of(context).colorScheme.primary
-                          )
-                      ),
+                              color: _selectedDate == null
+                                  ? Theme.of(context).disabledColor
+                                  : Theme.of(context).colorScheme.primary)),
                       prefixIcon: Icon(
                         Icons.date_range,
                         size: 26,
@@ -187,22 +197,24 @@ class _TransactionFormState extends State<TransactionForm> {
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(
-                          color: Theme.of(context).errorColor
-                        )
-                      ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          borderSide:
+                              BorderSide(color: Theme.of(context).errorColor)),
                     ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 8,),
+            const SizedBox(
+              height: 8,
+            ),
             Column(
               children: [
-                Text( _isCategoryEmpty == false
-                  ? "Category"
-                  : "Choose the category!",
+                Text(
+                  _isCategoryEmpty == false
+                      ? "Category"
+                      : "Choose the category!",
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
                 SizedBox(
@@ -211,7 +223,8 @@ class _TransactionFormState extends State<TransactionForm> {
                     itemCount: categoryList.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      final TransactionCategory selectedCategory = categoryList[index];
+                      final TransactionCategory selectedCategory =
+                          categoryList[index];
                       return Row(
                         children: [
                           CategoryWidget(
@@ -223,7 +236,9 @@ class _TransactionFormState extends State<TransactionForm> {
                               setState(() {});
                             },
                           ),
-                          const SizedBox(width: 8,),
+                          const SizedBox(
+                            width: 8,
+                          ),
                         ],
                       );
                     },
@@ -231,28 +246,28 @@ class _TransactionFormState extends State<TransactionForm> {
                 )
               ],
             ),
-            const SizedBox(height: 12,),
+            const SizedBox(
+              height: 12,
+            ),
             ElevatedButton(
                 onPressed: () {
-                  if (_inputKey.currentState!.validate() && _selectedCategoryPosition != -1) {
+                  if (_inputKey.currentState!.validate() &&
+                      _selectedCategoryPosition != -1) {
                     _submitData();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text( widget.isUpdate == true
-                            ? "Transaction has been updated!"
-                            : "Transaction has been added!"
-                          ),
-                          behavior: SnackBarBehavior.floating,
-                        ));
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(widget.isUpdate == true
+                          ? "Transaction has been updated!"
+                          : "Transaction has been added!"),
+                      behavior: SnackBarBehavior.floating,
+                    ));
                   } else if (_selectedCategoryPosition == -1) {
                     _isCategoryEmpty = true;
                     setState(() {});
                   }
                 },
                 child: Text(widget.isUpdate == true
-                  ? "Update Transaction"
-                  : "Add Transaction"
-                ))
+                    ? "Update Transaction"
+                    : "Add Transaction"))
           ],
         ),
       ),

@@ -5,13 +5,20 @@ class ChartBar extends StatelessWidget {
   final double spendingAmount;
   final double spendingPercentage;
 
-  const ChartBar({Key? key, required this.label, required this.spendingAmount, required this.spendingPercentage}) : super(key: key);
+  const ChartBar(
+      {Key? key,
+      required this.label,
+      required this.spendingAmount,
+      required this.spendingPercentage})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 4,),
+        const SizedBox(
+          height: 4,
+        ),
         SizedBox(
           height: 100,
           width: 15,
@@ -39,7 +46,9 @@ class ChartBar extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(height: 4,),
+        const SizedBox(
+          height: 4,
+        ),
         Text(label),
       ],
     );

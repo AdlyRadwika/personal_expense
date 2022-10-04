@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:personal_expense/pages/home/home.dart';
-import '../widgets/transaction_list_widget.dart';
+import '../widgets/transaction_item_widget.dart';
 import 'package:personal_expense/pages/logs/logs.dart';
 
 

@@ -8,8 +8,14 @@ class CategoryWidget extends StatelessWidget {
   final TransactionCategory selectedCategory;
   final int itemPosition;
   final Function(int position) onAreaClicked;
-  
-  const CategoryWidget({Key? key, required this.isSelected, required this.selectedCategory, required this.itemPosition, required this.onAreaClicked}) : super(key: key);
+
+  const CategoryWidget(
+      {Key? key,
+      required this.isSelected,
+      required this.selectedCategory,
+      required this.itemPosition,
+      required this.onAreaClicked})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,16 +25,14 @@ class CategoryWidget extends StatelessWidget {
       },
       style: OutlinedButton.styleFrom(
         foregroundColor: isSelected
-          ? Theme.of(context).colorScheme.primary
-          : Theme.of(context).unselectedWidgetColor, side: BorderSide(
-          color: isSelected
             ? Theme.of(context).colorScheme.primary
-            : Theme.of(context).disabledColor
-        ),
+            : Theme.of(context).unselectedWidgetColor,
+        side: BorderSide(
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).disabledColor),
       ),
-      icon: Icon(
-        IconUtil.getIconFromString(selectedCategory.name)
-      ),
+      icon: Icon(IconUtil.getIconFromString(selectedCategory.name)),
       label: Text(selectedCategory.name),
     );
   }
