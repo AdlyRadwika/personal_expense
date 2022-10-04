@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/model/transaction.dart';
 
-import 'package:personal_expense/pages/home/widgets/transaction_list_widget.dart';
+import 'package:personal_expense/widgets/transaction_list_widget.dart';
 
 class LogsPage extends StatelessWidget {
   final List<Transaction> transactions;

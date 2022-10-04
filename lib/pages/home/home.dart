@@ -6,7 +6,7 @@ import 'package:personal_expense/data/database/transactions_database.dart';
 
 import 'package:personal_expense/pages/home/widgets/add_button_widget.dart';
 import 'package:personal_expense/pages/home/widgets/chart_widget.dart';
-import 'package:personal_expense/pages/home/widgets/transaction_list_widget.dart';
+import 'package:personal_expense/widgets/transaction_list_widget.dart';
 import 'package:personal_expense/pages/home/widgets/transaction_form_widget.dart';
 
 class HomePage extends StatefulWidget {

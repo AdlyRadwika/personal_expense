@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../data/model/transaction.dart';
 import 'package:personal_expense/utility/icon_util.dart';
 
-import 'package:personal_expense/widget/text_field_widget.dart';
+import 'package:personal_expense/widgets/text_field_widget.dart';
 import 'package:personal_expense/pages/home/widgets/category_widget.dart';
 
 class TransactionForm extends StatefulWidget {

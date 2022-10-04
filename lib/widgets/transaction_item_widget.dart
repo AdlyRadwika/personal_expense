@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:empty_widget/empty_widget.dart';
 
-import '../../../data/model/transaction.dart';
-import '../../../utility/icon_util.dart';
+import '../data/model/transaction.dart';
+import '../utility/icon_util.dart';
 
 import 'package:personal_expense/pages/route.dart' as route;
 import 'package:personal_expense/pages/home/widgets/update_delete_widget.dart';
