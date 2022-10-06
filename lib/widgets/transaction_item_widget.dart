@@ -6,7 +6,7 @@ import '../data/model/transaction.dart';
 import '../utility/icon_util.dart';
 
 import 'package:personal_expense/pages/route.dart' as route;
-import 'package:personal_expense/pages/home/widgets/update_delete_widget.dart';
+import 'package:personal_expense/widgets/update_delete_widget.dart';
 
 class TransactionItem extends StatelessWidget {
   final List<Transaction> transactions;

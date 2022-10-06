@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../data/model/transaction.dart';
+import '../data/model/transaction.dart';
 import 'package:personal_expense/utility/icon_util.dart';
 
 import 'package:personal_expense/widgets/text_field_widget.dart';

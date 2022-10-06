@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import '../data/model/transaction.dart';
-import '../pages/home/widgets/transaction_form_widget.dart';
+import 'transaction_form_widget.dart';
 
 class InputTransactionModal {
   final bool isUpdate;
