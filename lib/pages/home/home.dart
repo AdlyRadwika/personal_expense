@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> {
                           isUpdate: true, updateTransaction: _updateTransaction)
                       .build,
                   deleteTransaction: _deleteTransaction,
+                  isLogs: false,
                 ),
               ],
             ),

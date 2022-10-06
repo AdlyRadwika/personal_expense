@@ -54,6 +54,7 @@ class _LogsPageState extends State<LogsPage> {
                     updateTransaction: _updateTransaction,
                   ).build,
                   deleteTransaction: _deleteTransaction,
+                  isLogs: true,
                 )
               ],
             ),

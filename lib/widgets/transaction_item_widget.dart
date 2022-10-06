@@ -13,13 +13,15 @@ class TransactionItem extends StatelessWidget {
   final Function inputTransactionModal;
   final Function deleteTransaction;
   final bool isRecent;
+  final bool isLogs;
 
   const TransactionItem(
       {Key? key,
       required this.transactions,
       required this.inputTransactionModal,
       required this.deleteTransaction,
-      required this.isRecent})
+      required this.isRecent,
+      required this.isLogs})
       : super(key: key);
 
   @override
@@ -30,7 +32,9 @@ class TransactionItem extends StatelessWidget {
               image: null,
               packageImage: PackageImage.Image_1,
               title: 'No Transaction!',
-              subTitle: 'Start by adding a new transaction',
+              subTitle: isLogs == true
+                ? 'Back to home and add a new transaction'
+                : 'Start by adding a new transaction',
               titleTextStyle: Theme.of(context).textTheme.titleLarge,
               subtitleTextStyle: Theme.of(context).textTheme.bodyMedium,
             ),
