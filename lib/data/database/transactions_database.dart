@@ -27,6 +27,7 @@ class TransactionsDb {
   Future _createDB(Database db, int version) async {
     final idType = 'INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL';
     final doubleType = 'DOUBLE NOT NULL';
+    final intType = 'INTEGER NOT NULL';
     final textType = 'TEXT NOT NULL';
 
     await db.execute('''
@@ -35,7 +36,10 @@ class TransactionsDb {
         ${tx.TransactionFields.title} $textType,
         ${tx.TransactionFields.amount} $doubleType,
         ${tx.TransactionFields.date} $textType,
-        ${tx.TransactionFields.category} $textType
+        ${tx.TransactionFields.category} $textType,
+        ${tx.TransactionFields.dateMonth} $textType,
+        ${tx.TransactionFields.dateYear} $intType,
+        ${tx.TransactionFields.createdDate} $textType,
       )
     ''');
   }
@@ -48,7 +52,7 @@ class TransactionsDb {
     return transaction.copy(id: id);
   }
 
-  Future<tx.Transaction> readTransaction(int id) async {
+  Future<tx.Transaction> readTransactionById(int id) async {
     final db = await instance.database;
 
     final maps = await db.query(
@@ -68,10 +72,27 @@ class TransactionsDb {
   Future<List<tx.Transaction>> readAllTransactions() async {
     final db = await instance.database;
 
-    final orderBy = '${tx.TransactionFields.date} ASC';
+    final orderBy = tx.TransactionFields.createdDate;
     final result = await db.query(tx.tableTransactions, orderBy: orderBy);
 
     return result.map((json) => tx.Transaction.fromJson(json)).toList();
+  }
+
+  Future<tx.Transaction> readTransactinByMonthAndYear(String month, int year) async {
+    final db = await instance.database;
+
+    final maps = await db.query(
+      tx.tableTransactions,
+      columns: tx.TransactionFields.values,
+      where: '${tx.TransactionFields.dateMonth} = ? AND ${tx.TransactionFields.dateYear} = ?',
+      whereArgs: [month, year],
+    );
+
+    if (maps.isNotEmpty) {
+      return tx.Transaction.fromJson(maps.first);
+    } else {
+      throw Exception('$month and $year are not found');
+    }
   }
 
   Future<int> updateTransaction(tx.Transaction transaction) async {
