@@ -90,13 +90,22 @@ class _HomePageState extends State<HomePage> {
     }).toList();
   }
 
-  Future _insertTransaction(String title, double amount, DateTime chosenDate,
-      String chosenCategory) async {
+  Future _insertTransaction(
+      String title,
+      double amount,
+      DateTime chosenDate,
+      String chosenCategory,
+      String chosenDateMonth,
+      int chosenDateYear,
+      DateTime createdDate) async {
     final newTransaction = Transaction(
       title: title,
       amount: amount,
       date: chosenDate,
       category: chosenCategory,
+      dateMonth: chosenDateMonth,
+      dateYear: chosenDateYear,
+      createdDate: createdDate,
     );
 
     await TransactionsDb.instance.createNewTransaction(newTransaction);
@@ -104,16 +113,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future _updateTransaction(
-      Transaction transaction,
-      String updatedTitle,
-      double updatedAmount,
-      DateTime updatedDate,
-      String updatedCategory) async {
+    Transaction transaction,
+    String updatedTitle,
+    double updatedAmount,
+    DateTime updatedDate,
+    String updatedCategory,
+    String updatedDateMonth,
+    int updatedDateYear,
+  ) async {
     final updatedTransaction = transaction.copy(
       title: updatedTitle,
       amount: updatedAmount,
       date: updatedDate,
       category: updatedCategory,
+      dateMonth: updatedDateMonth,
+      dateYear: updatedDateYear,
     );
 
     await TransactionsDb.instance.updateTransaction(updatedTransaction);

@@ -39,7 +39,7 @@ class TransactionsDb {
         ${tx.TransactionFields.category} $textType,
         ${tx.TransactionFields.dateMonth} $textType,
         ${tx.TransactionFields.dateYear} $intType,
-        ${tx.TransactionFields.createdDate} $textType,
+        ${tx.TransactionFields.createdDate} $textType
       )
     ''');
   }
@@ -72,7 +72,7 @@ class TransactionsDb {
   Future<List<tx.Transaction>> readAllTransactions() async {
     final db = await instance.database;
 
-    final orderBy = tx.TransactionFields.createdDate;
+    final orderBy = '${tx.TransactionFields.createdDate} DESC';
     final result = await db.query(tx.tableTransactions, orderBy: orderBy);
 
     return result.map((json) => tx.Transaction.fromJson(json)).toList();

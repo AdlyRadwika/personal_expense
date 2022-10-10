@@ -74,12 +74,17 @@ class _LogsPageState extends State<LogsPage> {
       String updatedTitle,
       double updatedAmount,
       DateTime updatedDate,
-      String updatedCategory) async {
+      String updatedCategory,
+      String updatedDateMonth,
+      int updatedDateYear,
+      ) async {
     final updatedTransaction = transaction.copy(
       title: updatedTitle,
       amount: updatedAmount,
       date: updatedDate,
       category: updatedCategory,
+      dateMonth: updatedDateMonth,
+      dateYear: updatedDateYear,
     );
 
     await TransactionsDb.instance.updateTransaction(updatedTransaction);

@@ -5,7 +5,7 @@ import '../data/model/transaction.dart';
 import 'package:personal_expense/utility/icon_util.dart';
 
 import 'package:personal_expense/widgets/text_field_widget.dart';
-import 'package:personal_expense/pages/home/widgets/category_widget.dart';
+import 'package:personal_expense/widgets/category_widget.dart';
 
 class TransactionForm extends StatefulWidget {
   final Function? addTransaction;
@@ -35,6 +35,7 @@ class _TransactionFormState extends State<TransactionForm> {
   late int _selectedCategoryPosition;
   bool _isCategoryEmpty = false;
   String? _formattedAmount;
+  final DateTime _createdDate = DateTime.now();
 
   @override
   void initState() {
@@ -75,6 +76,8 @@ class _TransactionFormState extends State<TransactionForm> {
   void _submitData() {
     final titleValue = _titleController.text;
     final amountValue = double.parse(removeComma(_amountController.text)!);
+    final dateMonthValue = DateFormat.MMMM().format(_selectedDate!);
+    final int dateYearValue = int.parse(DateFormat.y().format(_selectedDate!));
 
     widget.isUpdate == true
         ? widget.updateTransaction!(
@@ -83,12 +86,17 @@ class _TransactionFormState extends State<TransactionForm> {
             amountValue,
             _selectedDate,
             categoryList[_selectedCategoryPosition].name,
+            dateMonthValue,
+            dateYearValue,
           )
         : widget.addTransaction!(
             titleValue,
             amountValue,
             _selectedDate!,
             categoryList[_selectedCategoryPosition].name,
+            dateMonthValue,
+            dateYearValue,
+            _createdDate,
           );
 
     _titleController.clear();
