@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../data/database/transactions_database.dart';
 import '../../data/model/transaction.dart';
 import 'package:personal_expense/widgets/transaction_item_widget.dart';
@@ -64,8 +65,11 @@ class _LogsPageState extends State<LogsPage> {
     );
   }
 
-  refreshTransactions() async {
-    _transactions = await TransactionsDb.instance.readAllTransactions();
+  refreshTransactions([String? month, int? year]) async {
+    month = month ?? DateFormat.MMMM().format(DateTime.now());
+    year = year ?? DateTime.now().year;
+
+    _transactions = await TransactionsDb.instance.readTransactionByMonthAndYear(month, year);
     setState(() {});
   }
 

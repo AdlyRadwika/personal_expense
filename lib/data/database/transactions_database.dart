@@ -78,7 +78,7 @@ class TransactionsDb {
     return result.map((json) => tx.Transaction.fromJson(json)).toList();
   }
 
-  Future<tx.Transaction> readTransactinByMonthAndYear(String month, int year) async {
+  Future<List<tx.Transaction>> readTransactionByMonthAndYear(String month, int year) async {
     final db = await instance.database;
 
     final maps = await db.query(
@@ -89,7 +89,7 @@ class TransactionsDb {
     );
 
     if (maps.isNotEmpty) {
-      return tx.Transaction.fromJson(maps.first);
+      return maps.map((e) => tx.Transaction.fromJson(e)).toList();
     } else {
       throw Exception('$month and $year are not found');
     }
